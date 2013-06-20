@@ -1,0 +1,18 @@
+body {  font-family:Alef;  font-size:18px;  line-height:180%  }
+
+.dc_center {  clear:both;  position:relative;  margin:0 auto;  }
+.s_l {  float:left;  margin-left:0px;  }
+.s_r {  float:right;  margin-right:0px;  }
+.s_small {  font-size:13px;  }
+#wrapper {  width:20%;  margin-top:100px;  }
+#d_welcome {  text-align:center;  }
+#d_title {}
+#d_username {}
+#d_password {}
+#d_submit {  text-align:center;  }
+
+
+
+
+#infousers  {  width:100%;  }
+
