@@ -11,31 +11,34 @@
   </head>
 
   <body>
-    <div class="dc_center" id="wrapper">
-      <form method="post" action="ss">
-	<h2 class="dc_center" id="d_welcome">mini-site ברוכים הבאים ל</h2>
+    <div class="c_center" id="loginDiv">
 
-	<br>
+      <h2 class="c_center" id="welcomeH2">mini-site ברוכים הבאים ל</h2><br>
 
-	<div class="dc_center" id="d_title">
-	  <span class="s_l"><span class="s_small"><a href="#">צור חשבון</a></span></span>
-	  <span class="s_r">:התחבר למערכת</span>
-	</div>
-	<div class="dc_center" id="d_username">
-	  <span class="s_l"><input id="t_username" size=10></span>
-	  <span class="s_r">:שם משתמש</span>
-	</div>
-	<div class="dc_center" id="d_password">
-	  <span class="s_l"><input type="password" id="p_password" size=10><br><a href="#"><span class="s_small">שכחתי סיסמה</span></a></span>
-	  <span class="s_r">:סיסמה</span>
-	</div>
-	<div class="dc_center s_small" id="d_submit"><button id="login">התחבר</button></div>
+      <form id="loginForm">
+	<fieldset id="loginFieldSet" class="c_center">
+	  <legend>התחבר למערכת</legend>
+	  <div class="c_center c_left c_small_font" id="createAccountDiv"><a href="#">צור חשבון</a></div>
+	  <div class="c_center" id="usernameDiv">
+	    <span class="c_left"><input id="usernameText" size=10></span>
+	    <span class="c_right"><label for="usernameText">שם משתמש:</label></span>
+	  </div>
+	  <div class="c_center" id="passwordDiv">
+	    <span class="c_left"><input type="password" id="passwordText" size=10></span>
+	    <span class="c_right"><label for="passwordText">סיסמה:</label></span>
+	  </div>
+	  <div class="c_center c_left c_small_font" id="forgotPasswordDiv"><a href="#">שכחתי סיסמה</a></div>
+	  <div class="c_center c_small_font" id="buttonDiv"><button id="loginButton">התחבר</button></div>
+	  <div class="c_center" id="errorDiv"><label class="error" id="errorLabel"></label></div>
+
+
+	</fieldset>
       </form>
+
     </div>
 
     <br>
-
-    <table class="dc_center" id="infousers">
+    <table class="c_center" id="loggedUsersTable">
       <tr>
 	<th>IP כתובת</th>
 	<th>זמן עדכון אחרון</th>
