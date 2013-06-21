@@ -22,11 +22,33 @@ interface CredentialsProvider {
 class UserManager implements CredentialsProvider {
 
   /**
-   * Get all users in DBusers and return them in array
-   * @return array of user records on success, or NULL
-   * @throws (doesn't throw for now) if file has a record missing username or password
+   * Utility to get all lines from a text file, explode them to arrays of fields
+   * Ignore lines with empty 1st || 2nd fields
+   * @param $filename the file-name to fetch from
+   * @return array lines-array of field-arrays, or NULL
    */
-  private function get_users_from_file() {
+  public function getFileLines($filename) {
+    $lines = array();
+    $all_lines = file($filename, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+    if (!$all_lines)
+      return NULL;
+    foreach ($all_lines as $one_line) {
+      $fields = explode(" ", $one_line);
+      if (!empty($fields[0])  &&  !empty($fields[1]))
+	$lines[] = $fields;
+    }
+    return $lines;
+  }
+
+
+
+
+  /**
+   * Get all users in DBusers and return them in array
+   * @return array of user records, or NULL
+   * @throws (doesn't throw for now) if file is corrupt
+   */
+  private function getUsersFromFile() {
     $users = array();
     $usersfile = file('DBusers', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
     if (!$usersfile)
@@ -43,9 +65,12 @@ class UserManager implements CredentialsProvider {
   }
 
 
+  /*
+   * Definition of interface's virtual function
+   */
   public function checkCredentials($username, $password) {
     if (empty($username)  ||  empty($password))      return false;
-    $users = self::get_users_from_file();
+    $users = self::getUsersFromFile();
     foreach ($users as $userdata) {
       if ($userdata[0] == $username  &&  $userdata[1] == $password) /* crypt($password, $userdata[1]) == $userdata[1]) */
 	return true;
@@ -53,15 +78,52 @@ class UserManager implements CredentialsProvider {
     return false;
   }
 
+  /**
+   * Get all users in LOGGEDusers and return them in array
+   * @return array of logged-user records, or NULL
+   * @throws (doesn't throw for now) if file is corrupt
+   */
+  public function getLoggedUsers() {
+    $users = array();
+    $usersfile = file('LOGGEDusers', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+    if (!$usersfile)
+      return NULL;
+    foreach ($usersfile as $userline) {
+      $userdata = explode(" ", $userline);
+      if (!empty($userdata[0])  &&  !empty($userdata[1])) {
+	$email = empty($userdata[2]) ? "-" : $userdata[2];
+	$users[] = array($userdata[0], $userdata[1], $email);
+      }
+      /* else	throw new Exception("Fatal: Users data file is damaged.\n"); */
+    }
+    return $users;
+  }
+
+
+  /*
+   * Login the user: add these details to LOGGEDusers file:
+   *  username, connction-time, (last-update,) ip-address
+   * @param $username
+   * @param $password
+   */
+  public function loginUser($username, $password) {
+  }
+
+
+
+
+
+
+
 
   /**
    * Checks if user-name exists in the DB
    * @param string $username user-name
    * @return boolean true if user-name exists
    */
-  public function user_exists($username) {
+  public function username_exists($username) {
     if (empty($username))      return false;
-    $users = self::get_users_from_file();
+    $users = self::getUsersFromFile();
     foreach ($users as $userdata) {
       if ($userdata[0] == $username)
 	return true;
@@ -71,7 +133,7 @@ class UserManager implements CredentialsProvider {
 
 
   function update_user($username, $password, $email=NULL) {
-    $users = self::get_users_from_file();
+    $users = self::getUsersFromFile();
 
   }
 
@@ -95,21 +157,10 @@ class UserManager implements CredentialsProvider {
 
 
 
-if (UserManager::checkCredentials("avram", "bbb"))
-  echo "verified\n";
-else
-  echo "login error. try again\n";
-
-
-
-
-
 
 
 /*
   echo "(" . $username . ", " . $password . ") == (" . $userdata[0] . ", " . $userdata[1] . ") ?\n";
-
-
 
 
 //Loop through our array, show HTML source as HTML source; and line numbers too.
@@ -138,24 +189,12 @@ if (crypt($user_input, $hashed_password) == $hashed_password) {
 
 */
 
-
-
-
-
-
-
-
-
 /* You should pass the entire results of crypt() as the salt for comparing a
    password, to avoid problems when different hashing algorithms are used. (As
    it says above, standard DES-based password hashing uses a 2-character salt,
    but MD5-based hashing uses 12.) 
 
  echo $hashed_password;
-
-
-
-
 */
 
 

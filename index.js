@@ -1,16 +1,16 @@
-$(document).ready(rep3);
+//$(document).ready(rep3);
 
 function rep3() {
 
     $.getJSON("logged-users.php", function(loggedusers) {
-	$("#infousers").find("tr:gt(0)").remove(); // clear all rows except first
+	$('#infousers').find("tr:gt(0)").remove(); // clear all rows except first
 	$.each(loggedusers, function(key, val) {
 	    var useritem = '<tr align="center" id="' + key + '"><td>' + val.uip + '</td><td>' + val.uupdate + '</td><td>' + val.utime + '</td><td>' + val.uname + '</td></tr>';
-	    $("#infousers").append(useritem);
+	    $('#infousers').append(useritem);
 	});
     });
 
-    //$("#t_username").val($.now());
+    //$('#t_username').val($.now());
 
     setTimeout(rep3, 3000);
 };
@@ -18,24 +18,27 @@ function rep3() {
 
 $(function() {
     $('.error').hide();
+    $('#welcomeDiv').hide();
 
-    $("#loginButton").button();
+    $('#loginButton').button();
+    $('#logoutButton').button();
 
-    $("#loginButton").click(function() {
+
+    $('#loginButton').click(function() {
 	$('.error').hide();
-	var username = $("input#usernameText").val();
-	if (username == "") {
-	    $("label#errorLabel").text("שם משתמש אינו תקין");
-	    $("label#errorLabel").show();
-	    $("input#usernameText").focus();
+	var username = $('#usernameText').val();
+	if (username === "") {
+	    $('#errorLabel').text("שם משתמש אינו תקין");
+	    $('#errorLabel').show();
+	    $('#usernameText').focus();
 	    return false;
 	}
 
-	var password = $("input#passwordText").val();
-	if (password == "") {
-	    $("label#errorLabel").text("נא להזין סיסמה");
-	    $("label#errorLabel").show();
-	    $("input#passwordText").focus();
+	var password = $('#passwordText').val();
+	if (password === "") {
+	    $('#errorLabel').text("נא להזין סיסמה");
+	    $('#errorLabel').show();
+	    $('#passwordText').focus();
 	    return false;
 	}
 
@@ -44,16 +47,21 @@ $(function() {
 	//alert (dataString);return false;
 	$.ajax({
 	    type: "POST",
-	    url: "login.php",
+	    url: "login-user.php",
 	    data: dataString,
 	    success: function() {
-		$('#contact_form').html("<div id='message'></div>");
-		$('#message').html("<h2>Contact Form Submitted!</h2>")
-		    .append("<p>We will be in touch soon.</p>")
+		$('#loginDiv').hide();
+		$('#welcomeDiv').show()
 		    .hide()
-		    .fadeIn(1500, function() {
-			$('#message').append("<img id='checkmark' src='images/check.png' />");
-		    });
+		    .fadeIn(1500);
+		rep3();
+	    },
+	    error: function() {
+		alert (dataString);return false;
+		$('#errorLabel').text("פרטי משתמש אינם נכונים");
+		$('#errorLabel').show();
+		$('#usernameText').focus();
+		return false;
 	    }
 	});
 	return false;
@@ -67,7 +75,28 @@ $(function() {
 
 
 
+function validateEmail($email){
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    if(!emailReg.test($email)){
+	return false;
+    }else{
+	return true;
+    }
+}
 
+$(function(){
+    $('.fail').hide();
+    $(".submit").click(function(){
+	var email = $("#email").val();
+	if ( !validateEmail(email)){
+	    $('.fail').append("
+
+Please enter email
+");
+	    $('.fail').show();
+	    $("#email").focus();
+	    return false;
+	}
 
 
 
