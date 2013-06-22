@@ -5,10 +5,12 @@ body {  font-family:Alef;  font-size:18px;  line-height:180%  }
 .c_right {  float:right;  margin-right:0px;  }
 .c_small_font {  font-size:13px;  }
 
-#loginDiv {  width:20%;  margin-top:100px;  direction:rtl;  }
-#loginFieldSet {  border-radius:8px;  }
 
-#welcomeH1 {  text-align:center;  }
+#welcomeH1 {  text-align:center;  margin-top:160px;  }
+
+
+#loginDiv {  width:330px;  margin-top:100px;  direction:rtl;  border:0px solid red;  }
+#loginDiv fieldset {  background:pink;  border-radius:8px;  }
 #buttonDiv {  text-align:center;  }
 #errorDiv {  background:yellow;  text-align:center;  }
 
@@ -17,7 +19,11 @@ body {  font-family:Alef;  font-size:18px;  line-height:180%  }
 #welcomeDivFrame {  margin-top:20px;  width:28%;  border:1px solid black;  border-radius:8px;  text-align:center;  }
 #actionsDiv {  margin-top:20px;  width:70%;  }
 #disconnectLink {  margin-top:9px;  }
-
 #loggedUsersTable  {  margin-top:100px;  margin-bottom:30px;  width:100%;  }
 
+
+#createUserDiv {  width:330px;  margin-top:100px;  direction:rtl;  border:0px solid red;  }
+#createUserDiv fieldset {  background:yellow;  border-radius:8px;  }
+#buttonDiv {  text-align:center;  }
+#errorDiv {  background:yellow;  text-align:center;  }
 

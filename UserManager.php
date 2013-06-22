@@ -20,7 +20,13 @@ interface CredentialsProvider {
 }
 
 
+
+
+
 class UserManager implements CredentialsProvider {
+
+  const DB_USERS = "DB/USERS";   /* users database-file */
+  const DB_LOGINS = "DB/LOGINS"; /* active logins database-file */
 
   /**
    * Utility to get all lines from a text file, explode them to arrays of fields
@@ -50,7 +56,7 @@ class UserManager implements CredentialsProvider {
    * @throws (doesn't throw for now) if file is corrupt
    */
   public function getUsersFromFile() {
-    $users = self::getFileLines('DBusers');
+    $users = self::getFileLines(self::DB_USERS);
 
     foreach ($users as $userkey => $userfields)
       $users[$userkey][2] = empty($userfields[2]) ? "-" : $userfields[2];
@@ -72,13 +78,14 @@ class UserManager implements CredentialsProvider {
     return false;
   }
 
+
   /**
-   * Return array of all logged users from file LOGGEDusers
+   * Return array of all logged users from file DB_LOGINS
    * @return array of logged-user records, or NULL
    * @throws (doesn't throw for now) if file is corrupt
    */
   public function getLoggedUsers() {
-    $users = self::getFileLines('LOGGEDusers');
+    $users = self::getFileLines(self::DB_LOGINS);
     return $users;
   }
 
@@ -98,24 +105,23 @@ class UserManager implements CredentialsProvider {
   }
 
 
-
+  /**
+   * Collect information and write login line to file DB_LOGINS
+   * details written: username, connction-time, ip-address
+   * @param $username user-name (unique identifier)
+   */
   public function addUserToLoginsFile($username) {
     /* If server's time-zone needs to be set: */
     /* date_default_timezone_set('Asia/Jerusalem'); */
-
     $login = $username . " ";
     $login .= date("Y-m-d H:i:s") . " ";
-    //$login .= $_SERVER['REMOTE_ADDR'] . "  ";
-    //$login .= $_SERVER['HTTP_X_FORWARDED_FOR'];
-    //print_r($login); echo "\n";
-
-    file_put_contents("LOGGEDusers", $login. "\n", FILE_APPEND | LOCK_EX);
+    $login .= $_SERVER['REMOTE_ADDR'] . "  ";
+    file_put_contents(self::DB_LOGINS, $login. "\n", FILE_APPEND | LOCK_EX);
   }
 
 
   /*
-   * Login the user: add these details to LOGGEDusers file:
-   *  username, connction-time, (last-update,) ip-address
+   * Log the user into the system
    * @param $username
    * @param $password
    */
@@ -130,6 +136,26 @@ class UserManager implements CredentialsProvider {
     self::addUserToLoginsFile($username);
     exit (json_encode("true"));
   }
+
+
+  /*
+   * Log the user out of the system
+   * @param $username
+   */
+  public function logoutUser($username) {
+    $users = self::getLoggedUsers(); //print_r($users);
+    foreach ($users as $key => $userdata) {
+      if ($userdata[0] == $username) {
+	unset($users[$key]); // delete array member
+	file_put_contents(self::DB_LOGINS, "", LOCK_EX); // overwrite DB_LOGINS file
+	foreach ($users as $key => $userdata)
+	  file_put_contents(self::DB_LOGINS, implode(" ", $userdata) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_LOGINS file
+	exit (json_encode("true"));
+      }
+    }
+    exit (json_encode("false")); // no login for $username was found
+  }
+
 
 
 

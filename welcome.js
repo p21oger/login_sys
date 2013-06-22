@@ -4,10 +4,19 @@ function welcomeStart() {
     $('#loginButton').button();
     $('#logoutButton').button();
 
+    $('#loginButton').click(doLogin);
+    $('#logoutButton').click(doLogout);
+
+    $('#createLink').click(doCreate);
+    $('#remindLink').click(doRemind);
+
+
     $('#errorLabel').hide();
     $('#welcomeDiv').hide();
+    //$('#createUserDiv').hide();
 
-    $('#loginButton').click(doLogin);
+
+
 }
 
 
@@ -16,8 +25,6 @@ function doLogin() {
     var loginObj = {
 	username:  $('#usernameText').val(),
 	password:  $('#passwordText').val()
-    	//timelogin: myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds() + ' ' + myDate.getDate() + '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear(),
-    	//iplogin:   '1.2.3.4'
     };
 
     if (loginObj['username'] === "") {
@@ -50,7 +57,7 @@ function doLogin() {
 
 
 function loginTry(loginObj, loginResult) {
-    // alert(loginResult);
+    //alert(loginResult);
     if (loginResult === 'true'  ||  loginResult === 'logged') {
     	$('#loginDiv').hide();
 	$('#loggeduser').text(loginObj["username"]);
@@ -86,12 +93,73 @@ function rep3() {
 	});
     });
 
-    //$('#t_username').val($.now());
+    var tout = setTimeout(rep3, 3000);
 
+    //$('#t_username').val($.now());
     // var myDate = new Date();
     // var displayDate = (myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds() + ' ' + myDate.getDate() + '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear());
+    //timelogin: myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds() + ' ' + myDate.getDate() + '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear(),
     // $('#loggeduser').text(displayDate);
 
 
-    setTimeout(rep3, 3000);
-}
+} // rep3
+
+
+
+function doLogout() {
+    //clearTimeout(tout);
+    var logoutObj = {
+	username:  $('#loggeduser').text()
+    };
+
+    $.ajax({
+	url : 'logout-user.php',
+	data : logoutObj,
+	type : 'POST',
+	dataType : 'json'
+    })
+	.done(function(logoutResult) {
+	    $('#loggeduser').text('');
+	    //$('#usernameText').val();
+	    $('#passwordText').val('');
+
+    	    $('#loginDiv').show()
+    		.hide()
+    		.fadeIn(1500);
+    	    $('#welcomeDiv').hide();
+
+	    //rep3();
+
+    	    $('#errorLabel').text("להתראות " + logoutObj['username']);
+    	    $('#errorLabel').show();
+    	    $('#usernameText').focus();
+	})
+	.fail(function() {
+    	    //$('#errorLabel').text("תקלה בשרת - נסו שנית מאוחר יותר");
+    	    //$('#errorLabel').show();
+	});
+
+    return false;
+
+
+} // doLogout
+
+
+
+function doCreate() {
+    $('#loginDiv').hide();
+    $('#createUserDiv').show().hide().fadeIn(1500);
+
+    //alert("kookoo");
+
+    return false;
+} // doCreateNew
+
+
+function doRemind() {
+    $('#loginDiv').hide();
+    //$('#remindPasswordDiv').show().hide().fadeIn(1500);
+    //alert("booboo");
+
+    return false;
+} // doForgotPassword
