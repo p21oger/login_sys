@@ -12,7 +12,7 @@
 
   <body>
 
-    <h1 class="c_center" id="welcomeH1">mini-site ברוכים הבאים ל</h1>
+    <h1 class="c_center c_center_text" id="welcomeH1">mini-site ברוכים הבאים ל</h1>
 
 
     <div class="c_center" id="loginDiv">
@@ -28,9 +28,9 @@
 	    <span class="c_left"><input type="password" id="passwordText" size=10></span>
 	    <span class="c_right"><label for="passwordText">סיסמה:</label></span>
 	  </div>
-	  <div class="c_center c_left c_small_font" id="forgotPasswordDiv"><a id="remindLink" href="">שכחתי סיסמה</a></div>
-	  <div class="c_center c_small_font" id="buttonDiv"><button id="loginButton">התחבר</button></div>
-	  <div class="c_center" id="errorDiv"><label id="errorLabel"></label></div>
+	  <div class="c_center c_left c_small_font" id="forgotPasswordDiv"><a id="resetLink" href="">שכחתי סיסמה</a></div>
+	  <div class="c_center c_small_font c_center_text"><button id="loginButton">התחבר</button></div>
+	  <div class="c_center c_center_text c_error"><label id="loginErrorLabel"></label></div>
 	</fieldset>
       </form>
     </div>
@@ -39,11 +39,11 @@
 
 
     <div class="c_center" id="welcomeDiv">
-      <div class="c_center" id="welcomeDivFrame">
-	<div class="c_center" id="usernameDiv">ברוך הבא <label id="loggeduser"></label></div>
+      <div class="c_center">
+	<div class="c_center">ברוך הבא <label id="loggeduser"></label></div>
 	<div class="c_center" id="actionsDiv">
 	  <span class="c_left c_small_font" id="disconnectLink"><button id="logoutButton">התנתק</button></span>
-	  <span class="c_right c_small_font"><a href="#">עדכן מייל</a><br><a href="#">שנה סיסמה</a></span>
+	  <span class="c_right c_small_font"><a id="mailLink" href="">עדכן מייל</a><br><a id="passwordLink" href="">שנה סיסמה</a></span>
 	</div>
 	<div class="c_center"></div>
       </div>
@@ -55,27 +55,39 @@
 
 
 
-    <div class="c_center" id="createUserDiv">
-      <form id="createForm" >
-	<fieldset class="c_center">
-	  <legend>צור חשבון משתמש</legend>
-	  <div class="c_center" id="usernameDiv">
-	    <span class="c_left" style="vertical-align:middle;"><input id="usernameText" size=10></span>
-	    <span class="c_right"><label for="usernameText">שם משתמש:</label></span>
+    <div class="c_center" id="createUserDiv"><form><fieldset class="c_center"><legend>צור חשבון משתמש</legend>
+	  <div class="c_center">
+	    <span class="c_left"><input id="newNameText" size=10></span>
+	    <span class="c_right"><label for="newNameText">שם משתמש:</label></span>
 	  </div>
-	  <div class="c_center" id="passwordDiv">
-	    <span class="c_left"><input type="password" id="passwordText" size=10></span>
-	    <span class="c_right"><label for="passwordText">סיסמה:</label></span>
+	  <div class="c_center">
+	    <span class="c_left"><input type="password" id="newPasswordText" size=10></span>
+	    <span class="c_right"><label for="newPasswordText">סיסמה:</label></span>
 	  </div>
-	  <div class="c_center" id="passwordDiv">
-	    <span class="c_left"><input type="password" id="passwordText" size=10></span>
-	    <span class="c_right"><label for="passwordText">חזור על סיסמה:</label></span>
+	  <div class="c_center">
+	    <span class="c_left"><input type="password" id="newPassword_Text" size=10></span>
+	    <span class="c_right"><label for="newPassword_Text">חזור על סיסמה:</label></span>
 	  </div>
-	  <div class="c_center c_small_font" id="buttonDiv"><button id="createUserButton">צור משתמש</button></div>
-	  <div class="c_center" id="errorDiv"><label id="errorLabel"></label></div>
-	</fieldset>
-      </form>
-    </div>
+	  <div class="c_center">
+	    <span class="c_left"><input id="newMailText" size=10></span>
+	    <span class="c_right"><label for="newMailText">דואר אלקטרוני:</label></span>
+	  </div>
+	  <div class="c_center c_small_font c_center_text"><button id="newUserButton">צור משתמש</button></div>
+	  <div class="c_center c_center_text c_error"><label id="createUserErrorLabel"></label></div>
+    </fieldset></form></div>
+
+
+
+
+    <div class="c_center" id="resetPasswordDiv"><form><fieldset class="c_center"><legend>איפוס סיסמה</legend>
+	  <div class="c_center">
+	    <span class="c_left" style="vertical-align:middle;"><input id="resetMailText" size=10></span>
+	    <span class="c_right"><label for="resetMailText">דואר אלקטרוני:</label></span>
+	  </div>
+	  <div class="c_center c_small_font c_center_text"><button id="resetPasswordButton">אפס סיסמה</button></div>
+	  <div class="c_center c_center_text c_error"><label id="resetPasswordErrorLabel">קישור לאיפוס הסיסמה ישלח לכתובת זו</label></div>
+    </fieldset></form></div>
+
 
 
 

@@ -159,10 +159,6 @@ class UserManager implements CredentialsProvider {
 
 
 
-
-
-
-
   /**
    * Checks if user-name exists in the DB
    * @param string $username user-name
@@ -179,24 +175,27 @@ class UserManager implements CredentialsProvider {
   }
 
 
-  function update_user($username, $password, $email=NULL) {
-    $users = self::getUsersFromFile();
-
-  }
-
   /*
    * Adds new user to DB, encrypts the password
    * @param $username string the new user-name
    * @param $password string then new password
    * @param $email string optional email for password recovery
-   * @return boolean true:user added, false:user not added
    */
-  function add_user($username, $password, $email=NULL) {
+  function createUser($username, $password, $email=NULL) {
     if (empty($username)  ||  empty($password))
-      return false;
+      exit (json_encode("empty"));
 
+    if (username_exists($username))
+      exit (json_encode("exists"));
+
+    file_put_contents(self::DB_USERS, $username . " " . $password . " " . $email . "\n", FILE_APPEND | LOCK_EX);
+    exit (json_encode("true"));
   }
 
+  function update_user($username, $password, $email=NULL) {
+    $users = self::getUsersFromFile();
+
+  }
 
 
 } /* class UserManager */

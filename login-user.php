@@ -8,7 +8,6 @@ ini_set('html_errors', false);
 
 require_once('UserManager.php');
 
-//UserManager::loginUser("avram", "bbb");
 UserManager::loginUser($_POST["username"], $_POST["password"]);
 
 ?>

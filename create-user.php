@@ -8,7 +8,7 @@ ini_set('html_errors', false);
 
 require_once('UserManager.php');
 
-UserManager::logoutUser($_POST["username"]);
+UserManager::createUser($_POST["username"], $_POST["password"], $_POST["email"]);
 
 ?>
 
