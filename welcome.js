@@ -14,8 +14,10 @@ function welcomeStart() {
 function doLogin() {
     $('#errorLabel').hide();
     var loginObj = {
-	username: $('#usernameText').val(),
-	password: $('#passwordText').val()
+	username:  $('#usernameText').val(),
+	password:  $('#passwordText').val()
+    	//timelogin: myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds() + ' ' + myDate.getDate() + '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear(),
+    	//iplogin:   '1.2.3.4'
     };
 
     if (loginObj['username'] === "") {
@@ -37,7 +39,7 @@ function doLogin() {
 	type : 'POST',
 	dataType : 'json'
     })
-	.done(function(loginResult) { loginTry(loginObj, loginResult); })
+	.done(function(loginResult) {  loginTry(loginObj, loginResult);  })
 	.fail(function() {
     	    $('#errorLabel').text("תקלה בשרת - נסו שנית מאוחר יותר");
     	    $('#errorLabel').show();
@@ -48,7 +50,8 @@ function doLogin() {
 
 
 function loginTry(loginObj, loginResult) {
-    if ((loginResult) === 'true') {
+    // alert(loginResult);
+    if (loginResult === 'true'  ||  loginResult === 'logged') {
     	$('#loginDiv').hide();
 	$('#loggeduser').text(loginObj["username"]);
     	$('#welcomeDiv').show()
@@ -56,9 +59,16 @@ function loginTry(loginObj, loginResult) {
     	    .fadeIn(1500);
 	rep3();
     }
-    else {
+
+    // else if ((loginResult) === 'logged') {
+    // 	$('#errorLabel').text("המשתמש כבר מחובר למערכת");
+    // 	$('#errorLabel').show();
+    // 	$('#usernameText').focus();
+    // }
+
+    else if ((loginResult) === 'false') {
 	$('#errorLabel').text("משתמש זה אינו קיים במערכת");
-    	$('#errorLabel').show();
+	$('#errorLabel').show();
     	$('#usernameText').focus();
     }
 
