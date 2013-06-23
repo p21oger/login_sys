@@ -1,35 +1,31 @@
 body {  font-family:Alef;  font-size:18px;  line-height:180%  }
+button {  margin-top:15px;  }
 
 .c_center {  clear:both;  position:relative;  margin:0 auto;  }
 .c_left {  float:left;  margin-left:0px;  }
 .c_right {  float:right;  margin-right:0px;  }
 .c_small_font {  font-size:13px;  }
 .c_center_text {  text-align:center;  }
+.c_space {  margin-top:50px;  }
+.c_error {  background:yellow;  margin-top:5px;  }
 
 #welcomeH1 {  margin-top:160px;  margin-bottom:100px;  }
 
-button {  margin-top:3px;  }
-
-.c_error {  background:yellow;  margin-top:5px;  }
-
-
 #loginDiv {  width:330px;  direction:rtl;  }
 #loginDiv fieldset {  background:gainsboro;  border-radius:8px;  }
+#createLink, #resetLink {  cursor: hand; cursor: pointer;  color:blue;  }
 
 
-
-#welcomeDiv {  width:1200px;  border:1px solid black;  border-radius:8px;  text-align:center;  direction:rtl;  }
-#welcomeDiv > div {  background:gainsboro;  margin-top:20px;  width:28%;  border:1px solid black;  border-radius:8px;  text-align:center;  }
-#actionsDiv {  margin-top:20px;  width:70%;  }
-#disconnectLink {  margin-top:8px;  }
-#loggedUsersTable  {  margin-top:100px;  margin-bottom:30px;  width:100%;  }
-
-
-#createUserDiv {  width:330px;  direction:rtl;  }
-#createUserDiv fieldset {  background:gainsboro;  border-radius:8px;  }
+#welcomeDiv {  width:1200px;  border:1px solid black;  border-radius:8px;  text-align:center;  direction:rtl;  text-align:center;  }
+#welcomeDiv > div {  width:330px;  margin-top:15px;  }
+#welcomeDiv fieldset {  background:gainsboro;   border-radius:8px;  }
+#welcomeDiv ul {  margin-left:100px;  }
+#welcomeTable  {  margin-top:100px;  margin-bottom:30px;  width:100%;  }
 
 
+#createDiv {  width:330px;  direction:rtl;  }
+#createDiv fieldset {  background:gainsboro;  border-radius:8px;  }
 
-#resetPasswordDiv {  width:330px;  direction:rtl;  }
-#resetPasswordDiv fieldset {  background:gainsboro;  border-radius:8px;  }
 
+#resetDiv {  width:330px;  direction:rtl;  }
+#resetDiv fieldset {  background:gainsboro;  border-radius:8px;  }

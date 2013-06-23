@@ -185,7 +185,7 @@ class UserManager implements CredentialsProvider {
     if (empty($username)  ||  empty($password))
       exit (json_encode("empty"));
 
-    if (username_exists($username))
+    if (self::username_exists($username))
       exit (json_encode("exists"));
 
     file_put_contents(self::DB_USERS, $username . " " . $password . " " . $email . "\n", FILE_APPEND | LOCK_EX);
