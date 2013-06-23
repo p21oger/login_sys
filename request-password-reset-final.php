@@ -8,6 +8,9 @@ ini_set('html_errors', false);
 
 require_once('UserManager.php');
 
-UserManager::sendPasswordResetMail($_POST["email"]);
+UserManager::sendPasswordResetMailFinal($_GET["username"]);
 
 ?>
+
+
+

@@ -157,8 +157,6 @@ class UserManager implements CredentialsProvider {
   }
 
 
-
-
   /**
    * Checks if user-name exists in the DB
    * @param string $username user-name
@@ -191,6 +189,64 @@ class UserManager implements CredentialsProvider {
     file_put_contents(self::DB_USERS, $username . " " . $password . " " . $email . "\n", FILE_APPEND | LOCK_EX);
     exit (json_encode("true"));
   }
+
+
+  /**
+   * Sends email message with a link to reset password
+   * @param $email the email address to send the message to
+   */
+  function sendPasswordResetMail($email) {
+    $users = self::getUsersFromFile();
+    //print_r($users);
+
+    foreach($users as $userdata) {
+      if ($userdata[2] == $email) {
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$subject = "Request to reset passwor from mini-site";
+	$message = "<html><head><title>Request to reset password from mini-site</title></head>";
+	$message .= "<body style=\"direction:rtl;\">על מנת לאפס את הסיסמה לחץ על הקישור:<br>";
+	$message .= "<a href=\"http://";
+	$message .= $_SERVER["HTTP_HOST"];
+	$message .= "/mini-site/request-password-reset-final.php?username=";
+	$message .= $userdata[0];
+	$message .= "\">אפס סיסמה</a></body></html>";
+	mail($email, $subject, $message, $headers);
+      }
+    }
+    exit (json_encode("true"));
+  }
+
+
+  /**
+   * Resets the password for a user to '1111'
+   * @param $username the username who needs password resetting
+   */
+  function sendPasswordResetMailFinal($username) {
+    $users = self::getUsersFromFile();
+    foreach($users as $ukey => $userdata) {
+      if ($userdata[0] == $username) {
+	$users[$ukey][1] = "1111"; // reset password to 1111
+	file_put_contents(self::DB_USERS, "", LOCK_EX); // overwrite DB_USERS file
+	foreach ($users as $ukey => $userdata)
+	  file_put_contents(self::DB_USERS, implode(" ", $userdata) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_USERS file
+	$message = "<html><head><title>Request to reset password from mini-site</title></head>";
+	$message .= "<body style=\"direction:rtl;\"><h1>הסיסמה אופסה בהצלחה !</h1>";
+	$message .= "<p>הסיסמה כעת היא: 1111</p>";
+	$message .= "</body></html>";
+	exit ($message);
+      }
+    }
+    $message = "<html><head><title>Request to reset password from mini-site</title></head>";
+    $message .= "<body style=\"direction:rtl;\"><h1>.תקלה בשרת: הסיסמה לא אופסה</h1>";
+    $message .= "</body></html>";
+    exit ($message);
+  }
+
+
+
+
+
 
   function update_user($username, $password, $email=NULL) {
     $users = self::getUsersFromFile();

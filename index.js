@@ -1,3 +1,4 @@
+
 $(document).ready(indexStart);
 
 function indexStart() {
@@ -13,6 +14,10 @@ function indexStart() {
 
     $('#createLink').click(prepareCreate);	  // point click locations (dialogs)
     $('#resetLink').click(prepareReset);
+
+
+    var tout3;
+
     //$('#mailLink').click(prepareEmail);
     //$('#passwordLink').click(preparePassword);
 
@@ -41,14 +46,14 @@ function validateEmail($email) {
 
 function rep3() {
     $.getJSON("logged-users.php", function(loggedusers) {
-	$('#loggedUsersTable').find("tr:gt(0)").remove(); // clear all rows except first
+	$('#welcomeTable').find("tr:gt(0)").remove(); // clear all rows except first
 	$.each(loggedusers, function(key, val) {
 	    var useritem = '<tr align="center" id="' + key + '"><td>' + val.uip + '</td><td>' + val.uupdate + '</td><td>' + val.utime + '</td><td>' + val.uname + '</td></tr>';
-	    $('#loggedUsersTable').append(useritem);
+	    $('#welcomeTable').append(useritem);
 	});
     });
 
-    var tout = setTimeout(rep3, 3000);
+    tout3 = setTimeout(rep3, 3000);
 
     //$('#t_username').val($.now());
     // var myDate = new Date();

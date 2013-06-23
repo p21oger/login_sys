@@ -6,6 +6,8 @@ function prepareWelcome() {
     $('#welcomeDiv').hide().fadeIn(500);
     $('#createDiv').hide();
     $('#resetDiv').hide();
+
+    rep3();
 }
 
 
@@ -28,10 +30,6 @@ function clickWelcome() {
 	    $('#welcomeUsername').text('');
     	    $('#loginError').text("להתראות " + welcomeObj['username']).show();
     	    $('#loginUsername').focus();
-
-	    //clearTimeout(tout);
-	    //~rep3();
-
 	    prepareLogin();
 	})
 	.fail(function() {
