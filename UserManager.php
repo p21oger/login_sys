@@ -22,11 +22,11 @@ interface CredentialsProvider {
 
 
 
-
 class UserManager implements CredentialsProvider {
 
   const DB_USERS = "DB/USERS";   /* users database-file */
   const DB_LOGINS = "DB/LOGINS"; /* active logins database-file */
+  const DB_UPDATES = "DB/UPDATES"; /* timestamps of changes in USERS database-file */
 
   /**
    * Utility to get all lines from a text file, explode them to arrays of fields
@@ -51,17 +51,26 @@ class UserManager implements CredentialsProvider {
 
 
   /**
-   * Get all users in DBusers and return them in array
+   * Get all users in DB_USERS and return them in array
    * @return array of user records, or NULL
    * @throws (doesn't throw for now) if file is corrupt
    */
   public function getUsersFromFile() {
     $users = self::getFileLines(self::DB_USERS);
-
     foreach ($users as $userkey => $userfields)
       $users[$userkey][2] = empty($userfields[2]) ? "-" : $userfields[2];
-
     return $users;
+  }
+
+
+  /**
+   * Get users array and write them to DB_USERS
+   * @param $users users array containing records of user data
+   */
+  public function writeUsersToFile($users) {
+    file_put_contents(self::DB_USERS, "", LOCK_EX); // overwrite DB_USERS file
+    foreach ($users as $ukey => $userdata)
+      file_put_contents(self::DB_USERS, implode(" ", $userdata) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_USERS file
   }
 
 
@@ -173,6 +182,22 @@ class UserManager implements CredentialsProvider {
   }
 
 
+  /**
+   * Checks if email-address exists in the DB
+   * @param string $email email address
+   * @return boolean true if email-address exists
+   */
+  public function email_exists($email) {
+    if (empty($email))      return false;
+    $users = self::getUsersFromFile();
+    foreach ($users as $userdata) {
+      if ($userdata[2] == $email)
+	return true;
+    }
+    return false;
+  }
+
+
   /*
    * Adds new user to DB, encrypts the password
    * @param $username string the new user-name
@@ -186,7 +211,12 @@ class UserManager implements CredentialsProvider {
     if (self::username_exists($username))
       exit (json_encode("exists"));
 
+    if (self::email_exists($email))
+      exit (json_encode("email-exists"));
+
     file_put_contents(self::DB_USERS, $username . " " . $password . " " . $email . "\n", FILE_APPEND | LOCK_EX);
+    self::writeUpdateTime($username);
+
     exit (json_encode("true"));
   }
 
@@ -227,9 +257,8 @@ class UserManager implements CredentialsProvider {
     foreach($users as $ukey => $userdata) {
       if ($userdata[0] == $username) {
 	$users[$ukey][1] = "1111"; // reset password to 1111
-	file_put_contents(self::DB_USERS, "", LOCK_EX); // overwrite DB_USERS file
-	foreach ($users as $ukey => $userdata)
-	  file_put_contents(self::DB_USERS, implode(" ", $userdata) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_USERS file
+	self::writeUsersToFile($users);
+	self::writeUpdateTime($username);
 	$message = "<html><head><title>Request to reset password from mini-site</title></head>";
 	$message .= "<body style=\"direction:rtl;\"><h1>הסיסמה אופסה בהצלחה !</h1>";
 	$message .= "<p>הסיסמה כעת היא: 1111</p>";
@@ -244,47 +273,121 @@ class UserManager implements CredentialsProvider {
   }
 
 
-
-
-
-
-  function update_user($username, $password, $email=NULL) {
+  /**
+   * Update email address for a user
+   * @param $username which username
+   * @param $email the new email
+   */
+  function updateMail($username, $email) {
+    if (self::email_exists($email))
+      exit (json_encode("email-exists"));
     $users = self::getUsersFromFile();
-
+    foreach($users as $ukey => $userdata) {
+      if ($userdata[0] == $username) {
+	$users[$ukey][2] = $email;
+	self::writeUsersToFile($users);
+	self::writeUpdateTime($username);
+	exit (json_encode("true"));
+      }
+    }
   }
 
 
+  /**
+   * Update password for a user
+   * @param $username which username
+   * @param $password the new password
+   */
+  function updatePassword($username, $password) {
+    $users = self::getUsersFromFile();
+    foreach($users as $ukey => $userdata) {
+      if ($userdata[0] == $username) {
+	$users[$ukey][1] = $password;
+	self::writeUsersToFile($users);
+	self::writeUpdateTime($username);
+	exit (json_encode("true"));
+      }
+    }
+  }
+
+
+  /**
+   * Logout user and Delete account
+   * @param $username which username
+   */
+  function deleteUser($username) {
+    $users = self::getUsersFromFile();
+    foreach($users as $ukey => $userdata) {
+      if ($userdata[0] == $username) {
+	unset($users[$ukey]); // delete array member
+	self::writeUsersToFile($users);
+	self::deleteUpdateTime($username);
+	self::logoutUser($username);
+	exit (json_encode("true"));
+      }
+    }
+  }
+
+
+
+  /**
+   * Deletes username record from DB_UPDATES
+   * @param $username the username to delete
+   */
+  public function deleteUpdateTime($username) {
+    $changes = self::getFileLines(self::DB_UPDATES);
+    foreach($changes as $ckey => $cval) {
+      if ($cval[0] == $username)
+	unset($changes[$ckey]);
+    }
+    file_put_contents(self::DB_UPDATES, "", LOCK_EX); // overwrite DB_UPDATES file
+    foreach ($changes as $ckey => $cval)
+      file_put_contents(self::DB_UPDATES, implode(" ", $cval) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_USERS file
+  }
+
+
+  /**
+   * Writes username and time it was created or updated to DB_UPDATES
+   * @param $username the username for whom to write the time
+   */
+  public function writeUpdateTime($username) {
+    /* If server's time-zone needs to be set: */
+    /* date_default_timezone_set('Asia/Jerusalem'); */
+
+    $changes = self::getFileLines(self::DB_UPDATES);
+
+    foreach($changes as $ckey => $cval) {
+      if ($cval[0] == $username)
+	unset($changes[$ckey]);
+    }
+
+    $timestring = date("Y-m-d H:i:s");
+
+    $changes[] = array($username, $timestring);
+
+    file_put_contents(self::DB_UPDATES, "", LOCK_EX); // overwrite DB_UPDATES file
+    foreach ($changes as $ckey => $cval)
+      file_put_contents(self::DB_UPDATES, implode(" ", $cval) . "\n", FILE_APPEND | LOCK_EX); // append user to DB_USERS file
+  }
+
+
+  /**
+   * Return the time a user was created or updated
+   * @param $username the username for whom to fetch the time
+   * @return string of time formatted as: 'yyyy-mm-dd hh:mm:ss'
+   */
+  public function getUpdateTime($username) {
+    $changes = self::getFileLines(self::DB_UPDATES);
+    foreach($changes as $ckey => $cval) {
+      if ($cval[0] == $username)
+	return ($cval[1] . " " . $cval[2]);
+    }
+    return null;
+  }
+
+
+
 } /* class UserManager */
-
-
-
-
-
-
-/*
-// Another example, let's get a web page into a string.  See also file_get_contents().
-$html = implode('', file('http://www.example.com/'));
-
-// Using the optional flags parameter since PHP 5
-$trimmed = file('somefile.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-
-$hashed_password = crypt('mypassword');
-
-$user_input = 'mypassword';
-if (crypt($user_input, $hashed_password) == $hashed_password) { 
-  echo "Password verified!\n"; 
-} 
-
-*/
-
-/* You should pass the entire results of crypt() as the salt for comparing a
-   password, to avoid problems when different hashing algorithms are used. (As
-   it says above, standard DES-based password hashing uses a 2-character salt,
-   but MD5-based hashing uses 12.) 
-
- echo $hashed_password;
-*/
 
 
 ?>

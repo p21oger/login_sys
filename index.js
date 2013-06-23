@@ -6,25 +6,37 @@ function indexStart() {
     $('#welcomeButton').button();
     $('#createButton').button();
     $('#resetButton').button();
+    $('#mailButton').button();
+    $('#passwordButton').button();
+    $('#deleteButton').button();
+
 
     $('#loginButton').click(clickLogin);          // point click locations (actions)
     $('#welcomeButton').click(clickWelcome);
     $('#createButton').click(clickCreate);
     $('#resetButton').click(clickReset);
+    $('#mailButton').click(clickMail);
+    $('#passwordButton').click(clickPassword);
+    $('#deleteButton').click(clickDelete);
+
+
 
     $('#createLink').click(prepareCreate);	  // point click locations (dialogs)
     $('#resetLink').click(prepareReset);
 
+    $('#mailLink').click(prepareMail);
+    $('#passwordLink').click(preparePassword);
+    $('#deleteLink').click(prepareDelete);
 
-    var tout3;
-
-    //$('#mailLink').click(prepareEmail);
-    //$('#passwordLink').click(preparePassword);
 
 
     $('#loginError').hide();		  // hide error labels
     $('#createError').hide();
     $('#resetError').hide();
+    $('#mailError').hide();
+    $('#passwordError').hide();
+    $('#deleteError').hide();
+
 
     prepareLogin();
 }
@@ -45,7 +57,7 @@ function validateEmail($email) {
 
 
 function rep3() {
-    $.getJSON("logged-users.php", function(loggedusers) {
+    $.getJSON("request-logged-users.php", function(loggedusers) {
 	$('#welcomeTable').find("tr:gt(0)").remove(); // clear all rows except first
 	$.each(loggedusers, function(key, val) {
 	    var useritem = '<tr align="center" id="' + key + '"><td>' + val.uip + '</td><td>' + val.uupdate + '</td><td>' + val.utime + '</td><td>' + val.uname + '</td></tr>';

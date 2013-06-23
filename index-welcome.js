@@ -6,6 +6,9 @@ function prepareWelcome() {
     $('#welcomeDiv').hide().fadeIn(500);
     $('#createDiv').hide();
     $('#resetDiv').hide();
+    $('#mailDiv').hide();
+    $('#passwordDiv').hide();
+    $('#deleteDiv').hide();
 
     rep3();
 }

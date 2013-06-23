@@ -6,6 +6,9 @@ function prepareLogin() {
     $('#welcomeDiv').hide();
     $('#createDiv').hide();
     $('#resetDiv').hide();
+    $('#mailDiv').hide();
+    $('#passwordDiv').hide();
+    $('#deleteDiv').hide();
 
     //$('#loginUsername').text('');
     $('#loginPassword').text('');
@@ -50,7 +53,8 @@ function clickLogin() {
     		$('#loginUsername').focus();
 	    }
 	})
-	.fail(function() {
+	.fail(function(loginResult) {
+	    //alert(JSON.stringify(loginResult));
     	    $('#loginError').text("תקלה בשרת - נסו שנית מאוחר יותר").show();
 	});
 

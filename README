@@ -1,0 +1,42 @@
+Copyright (C) 2013  Ronen Gilead-Raz
+
+
+
+mini-site 1.0
+--------------
+
+created by: Ronen Gilead-Raz
+	    ronengi@gmail.com
+	    054-5526645
+
+	    2013-Jun-23
+
+
+
+This is a simple users database management system.
+Using PHP, JQuery, HTML, CSS
+
+Written completely using:	gnu-Emacs
+Version managemet:		Git
+Sending mail:			sendmail
+Tested on:			Apache Web-Server
+       				Firefox
+
+Using Alef fonts ( http://alef.hagilda.com/ )
+
+
+Uses 3 files as database. The webserver needs permission
+to create and change these files:
+ ./DB/USERS 
+ ./DB/LOGINS
+ ./DB/UPDATES
+
+
+
+Start with:  index.html
+Then follow the link to create a new user and continue from there.
+
+
+Thanks for viewing this Work.
+
+Ronen

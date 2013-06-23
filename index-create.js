@@ -6,6 +6,9 @@ function prepareCreate() {
     $('#welcomeDiv').hide();
     $('#createDiv').hide().fadeIn(500);
     $('#resetDiv').hide();
+    $('#mailDiv').hide();
+    $('#passwordDiv').hide();
+    $('#deleteDiv').hide();
 
     $('#createUsername').val('');
     $('#createPassword').val('');
@@ -60,6 +63,12 @@ function clickCreate() {
 	    else if ((createResult) === 'exists') {
 		$('#createError').text("שם המשתמש כבר קיים במערכת").show();
 		$('#createUsername').focus();
+		$('#createPassword').val('');
+		$('#createPassword_').val('');
+	    }
+	    else if ((createResult) === 'email-exists') {
+		$('#createError').text("כתובת דואר כבר קיימת במערכת").show();
+		$('#createEmail').focus();
 		$('#createPassword').val('');
 		$('#createPassword_').val('');
 	    }

@@ -1,6 +1,8 @@
 body {  font-family:Alef;  font-size:18px;  line-height:180%  }
 button {  margin-top:15px;  }
 
+fieldset {  background:gainsboro;  border-radius:8px;  }
+
 .c_center {  clear:both;  position:relative;  margin:0 auto;  }
 .c_left {  float:left;  margin-left:0px;  }
 .c_right {  float:right;  margin-right:0px;  }
@@ -12,20 +14,18 @@ button {  margin-top:15px;  }
 #welcomeH1 {  margin-top:160px;  margin-bottom:100px;  }
 
 #loginDiv {  width:330px;  direction:rtl;  }
-#loginDiv fieldset {  background:gainsboro;  border-radius:8px;  }
-#createLink, #resetLink {  cursor: hand; cursor: pointer;  color:blue;  }
+
+#createLink, #resetLink, #welcomeDiv ul li {  cursor: hand; cursor: pointer;  color:blue;  text-decoration:underline;  }
 
 
 #welcomeDiv {  width:1200px;  border:1px solid black;  border-radius:8px;  text-align:center;  direction:rtl;  text-align:center;  }
 #welcomeDiv > div {  width:330px;  margin-top:15px;  }
 #welcomeDiv fieldset {  background:gainsboro;   border-radius:8px;  }
-#welcomeDiv ul {  margin-left:100px;  }
+#welcomeDiv ul {  margin-right:30px;  text-align:right;  }
+
 #welcomeTable  {  margin-top:100px;  margin-bottom:30px;  width:100%;  }
 
 
-#createDiv {  width:330px;  direction:rtl;  }
-#createDiv fieldset {  background:gainsboro;  border-radius:8px;  }
+#createDiv, #resetDiv, #mailDiv, #passwordDiv, #deleteDiv {  width:330px;  direction:rtl;  }
 
 
-#resetDiv {  width:330px;  direction:rtl;  }
-#resetDiv fieldset {  background:gainsboro;  border-radius:8px;  }

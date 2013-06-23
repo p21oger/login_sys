@@ -6,6 +6,9 @@ function prepareReset() {
     $('#welcomeDiv').hide();
     $('#createDiv').hide();
     $('#resetDiv').hide().fadeIn(500);
+    $('#mailDiv').hide();
+    $('#passwordDiv').hide();
+    $('#deleteDiv').hide();
 
     $('#resetEmail').val('');
 }
