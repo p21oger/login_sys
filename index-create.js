@@ -74,7 +74,7 @@ function clickCreate() {
 	    }
 	})
 	.fail(function(createResult) {
-	    //alert(JSON.stringify(createResult));
+	    alert(JSON.stringify(createResult));
     	    $('#createError').text("תקלה בשרת - נסו שנית מאוחר יותר").show();
 	});
 

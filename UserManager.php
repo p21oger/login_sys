@@ -255,16 +255,16 @@ class UserManager implements CredentialsProvider {
   function sendPasswordResetMailFinal($username) {
     $users = self::getUsersFromFile();
     foreach($users as $ukey => $userdata) {
-      if ($userdata[0] == $username) {
-	$users[$ukey][1] = "1111"; // reset password to 1111
-	self::writeUsersToFile($users);
-	self::writeUpdateTime($username);
-	$message = "<html><head><title>Request to reset password from mini-site</title></head>";
-	$message .= "<body style=\"direction:rtl;\"><h1>הסיסמה אופסה בהצלחה !</h1>";
-	$message .= "<p>הסיסמה כעת היא: 1111</p>";
-	$message .= "</body></html>";
-	exit ($message);
-      }
+        if ($userdata[0] == $username) {
+            $users[$ukey][1] = "1111"; // reset password to 1111
+            self::writeUsersToFile($users);
+            self::writeUpdateTime($username);
+            $message = "<html><head><title>Request to reset password from mini-site</title></head>";
+            $message .= "<body style=\"direction:rtl;\"><h1>הסיסמה אופסה בהצלחה !</h1>";
+            $message .= "<p>הסיסמה כעת היא: 1111</p>";
+            $message .= "</body></html>";
+            exit ($message);
+        }
     }
     $message = "<html><head><title>Request to reset password from mini-site</title></head>";
     $message .= "<body style=\"direction:rtl;\"><h1>.תקלה בשרת: הסיסמה לא אופסה</h1>";
